@@ -8,13 +8,21 @@ trait UserTrait{
 	 * @return bool
 	 */
 	public function isAllowedTo($privilege, $resource = null){
-		$roles = $resource->getRoles($this);
-		$className = get_class($resource);
+		if ($resource === null){
+			$roles = array($this->getRole());
+			$acl = &self::$_acl;
+		}
+		else{
+			$roles = $resource->getRoles($this);
+			$className = get_class($resource);
+			$acl = &$className::$acl;
+		}
+		
 		for ($i = count($roles) - 1; $i >= 0; $i--){
-			if (!isset($className::$acl[$roles[$i]]))
+			if (!isset($acl[$roles[$i]]))
 				continue;
 				
-			$privilegesMap = $className::$acl[$roles[$i]];
+			$privilegesMap = $acl[$roles[$i]];
 			if (isset($privilegesMap[$privilege]))
 				return $privilegesMap[$privilege];
 		}
