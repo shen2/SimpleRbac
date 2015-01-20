@@ -1,45 +1,57 @@
-impleAcl
+SimpleAcl
 =========
 
 一个简单高效的Acl访控库
 
-## 库的基本说明
-* role角色：通过实现SimpleAcl\RoleInterface接口，通过getRoles()获取，存储在role数组里
-* resources资源：通过实现SimpleAcl\ResourceInterface接口，定义了相应的角色跟操作关联数组$acl形如：
+## Introduction
+通过SimpleAcl，可以让web应用中的各种权限判断问题变得简单清晰。
 ```php
-array('editor'=>'post','admin'=>'delete')
+if (!$visitor->isAllowedTo('delete', $image))
+	throw Exception('你没有删除图片的权限');
 ```
-* user用户：定义了一系列资源的相关操作方法，继承UserTrait
-* privilege权限：各种删除、上传等操作，在资源里定义
 
-## 简单实例
-用户删除一张图片:
+## 访问者
+故名思议，就是当前的访客信息，你可以编写自己的访客类，只要use SimpleAcl\UserTrait，就可以获得isAllowedTo()方法。
 ```php
-$this->visitor->isAllowedTo('delete', $image)
-```
-+ $image 代表图片资源
-<br\>权限设置如下：
-```php
-$acl = array(
-	//原作者
-	'author'		=>	array('delete' => true, 'edit' => true, 'update' => true, 'close' => true, 'replace' => true, 'downloadoriginal' => true）,
-	'global-user'		=>	array('view' => true, 'favorite' => true),
-	'global-editor'		=>	array('edit' => true, 'delete' => true, 'update' => true, 'replace' => true, 'remove-from-site' => true, 'close' => true, 'downloadoriginal' => true, 'moderate' => true),
-	'global-administrator'	=>array(),
-	);
-```
-+ $this->visitor代表用户
-关键方法：
-```php
-public function getRoles($userid) {
-	static $team;  //这个是角色成员变量实例：array(5=>'admin', 10=>'editor')
-	$role = isset($team[$userid])
-	    	? $team[$this[userid]]
-	    	: 'user';
-	return $role;
+class Visitor{
+	use SimpleAcl\UserTrait;
+	// your code...
 }
 ```
-根据getRoles获取到相应的角色
-+ 通过isAllowedTo方法，判断是否可以访问
 
+## Role (角色)
+SimpleAcl中的角色，是指当前访问者相对于某个资源而言的角色，角色有可能有一个，也可能有多个，也可能没有。比如，我自己发布的文章，我既是author，又是system-administrator。而对于一个未登录的访客而言，他对于这篇文章没有任何角色。
 
+## Resource资源
+资源可以是一篇文章，一张图片，通常可以和Model联系在一起。只要定义自己的$acl访问表数组，同时定义getRoles()方法，可以实现SimpleAcl\ResourceInterface接口。例如：
+```php
+class Image implements SimpleAcl\RoleInterface{
+	// 定义访控表
+	public static $acl = array(
+		'author'	=> array('delete' => true, 'edit' => true, 'update' => true, 'close' => true,),
+		'administrator'	=> array('delete' => true, 'edit' => true, 'update' => true, 'replace' => true,),
+	);
+	
+	// 获取用户相对于当前对象的角色
+	public function getRoles($user){
+		$roles = array();
+		if ($this['author_id] == $user['user_id']){
+			$roles[] = 'author';
+		}
+		
+		static $administrators = array(1, 1024);
+		if (in_array($user['user_id'], $administrators)){
+			$roles[] = 'administrator';
+		}
+		
+		return $roles;
+	}
+}
+```
+
+## 大功告成
+于是你就可以写出像自然语言一样优雅的代码了：
+```php
+if (!$visitor->isAllowedTo('delete', $image))
+	throw Exception('你没有删除图片的权限');
+```
