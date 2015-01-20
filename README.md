@@ -22,10 +22,10 @@ $this->visitor->isAllowedTo('delete', $image)
 ```php
 $acl = array(
 	//原作者
-	'author'	=>	array('delete' => true, 'edit' => true, 'update' => true, 'close' => true, 'replace' => true, 'downloadoriginal' => true）,
-	'global-user'	=>	array('view' => true, 'favorite' => true),
-	'global-editor'	=>	array('edit' => true, 'delete' => true, 'update' => true, 'replace' => true, 'remove-from-site' => true, 'close' => true, 'downloadoriginal' => true, 'moderate' => true),
-	'global-administrator'=>array(),
+	'author'		=>	array('delete' => true, 'edit' => true, 'update' => true, 'close' => true, 'replace' => true, 'downloadoriginal' => true）,
+	'global-user'		=>	array('view' => true, 'favorite' => true),
+	'global-editor'		=>	array('edit' => true, 'delete' => true, 'update' => true, 'replace' => true, 'remove-from-site' => true, 'close' => true, 'downloadoriginal' => true, 'moderate' => true),
+	'global-administrator'	=>array(),
 	);
 ```
 + $this->visitor代表用户
