@@ -11,8 +11,8 @@ SimpleAcl
 
 ## 简单实例
 用户删除一张图片:$this->visitor->isAllowedTo('delete', $image)。
-$image 代表图片资源
-权限设置如下：
++ $image 代表图片资源
+<br\>权限设置如下：
 ```php
 $acl = array(
 		//原作者
@@ -22,7 +22,7 @@ $acl = array(
 	'global-administrator'=>array(),
 	);
 ```
-$this->visitor代表用户
++ $this->visitor代表用户
 关键方法：
 ```php
 public function getRoles($userid) {
@@ -34,7 +34,7 @@ public function getRoles($userid) {
 }
 ```
 根据getRoles获取到相应的角色
-通过isAllowedTo方法，判断是否可以访问
++ 通过isAllowedTo方法，判断是否可以访问
 ```php
 function isAllowedTo($privilege, $resource = null, $acl=null){
 		if ($resource === null){
