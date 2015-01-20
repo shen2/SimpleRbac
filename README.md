@@ -27,7 +27,7 @@ $acl = array(
 ```php
 public function getRoles($userid) {
     	static $team;  //这个是角色成员变量实例：array(5=>'admin', 10=>'editor')
-      $role = isset($team[$userid])
+        $role = isset($team[$userid])
 	    	? $team[$this[userid]]
 	    	: 'user';
     	return $role;
@@ -37,23 +37,23 @@ public function getRoles($userid) {
 + 通过isAllowedTo方法，判断是否可以访问
 ```php
 function isAllowedTo($privilege, $resource = null, $acl=null){
-		if ($resource === null){
-			$roles = getRoles();
-			$acl = $_acl;
-		}
-		else{
-			$roles = getRoles($resource);
-			$acl = &$resource::$acl;
-		}
-		
-		for ($i = count($roles) - 1; $i >= 0; $i--){
-			if (!isset($acl[$roles[$i]]))
-				continue;
-				
-			$privilegesMap = $acl[$roles[$i]];
-			if (isset($privilegesMap[$privilege]))
-				return $privilegesMap[$privilege];
-		}
-		return false;
+	if ($resource === null){
+		$roles = getRoles();
+		$acl = $_acl;
 	}
+	else{
+		$roles = getRoles($resource);
+		$acl = &$resource::$acl;
+	}
+		
+	for ($i = count($roles) - 1; $i >= 0; $i--){
+		if (!isset($acl[$roles[$i]]))
+			continue;
+			
+		$privilegesMap = $acl[$roles[$i]];
+		if (isset($privilegesMap[$privilege]))
+			return $privilegesMap[$privilege];
+	}
+	return false;
+}
 ```
