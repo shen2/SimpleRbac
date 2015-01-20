@@ -5,7 +5,7 @@ SimpleAcl
 
 ## 库的基本说明
 * role角色：通过实现SimpleAcl\RoleInterface接口，通过getRoles()获取，存储在role数组里
-* resources资源：通过实现SimpleAcl\ResourceInterface接口，定义了相应的角色跟操作关联数组
+* resources资源：通过实现SimpleAcl\ResourceInterface接口，定义了相应的角色跟操作关联数组$acl形如：array('editor'=>'post','admin'=>'delete')
 * user用户：定义了一系列资源的相关操作方法，继承UserTrait
 * privilege权限：各种删除、上传等操作，在资源里定义
 
