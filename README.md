@@ -10,5 +10,50 @@ SimpleAcl
 * privilege权限：各种删除、上传等操作，在资源里定义
 
 ## 简单实例
-用户删除一张图片:$this->visitor->isAllowedTo('delete', $image),其中$this->visitor代表一个特定的用户通过getRoles()可以获取
-到相应的roles，delete代表privilege，$image代表resources，通过指定资源查找相应的角色操作数组，判断是否可以访问
+用户删除一张图片:$this->visitor->isAllowedTo('delete', $image)。
+$image 代表图片资源
+权限设置如下：
+```php
+$acl = array(
+		//原作者
+  'author'		=>	array('delete' => true, 'edit' => true, 'update' => true, 'close' => true, 'replace' => true,         'downloadoriginal' => true）,
+	'global-user'	=>	array('view' => true, 'favorite' => true),
+	'global-editor'	=>	array('edit' => true, 'delete' => true, 'update' => true, 'replace' => true, 'remove-from-site' => true, 'close' => true, 'downloadoriginal' => true, 'moderate' => true),
+	'global-administrator'=>array(),
+	);
+```
+$this->visitor代表用户
+关键方法：
+```php
+public function getRoles($userid) {
+    	static $team;  //这个是角色成员变量实例：array(5=>'admin', 10=>'editor')
+      $role = isset($team[$userid])
+	    	? $team[$this[userid]]
+	    	: 'user';
+    	return $role;
+}
+```
+根据getRoles获取到相应的角色
+通过isAllowedTo方法，判断是否可以访问
+```php
+function isAllowedTo($privilege, $resource = null, $acl=null){
+		if ($resource === null){
+			$roles = getRoles();
+			$acl = $_acl;
+		}
+		else{
+			$roles = getRoles($resource);
+			$acl = &$resource::$acl;
+		}
+		
+		for ($i = count($roles) - 1; $i >= 0; $i--){
+			if (!isset($acl[$roles[$i]]))
+				continue;
+				
+			$privilegesMap = $acl[$roles[$i]];
+			if (isset($privilegesMap[$privilege]))
+				return $privilegesMap[$privilege];
+		}
+		return false;
+	}
+```
