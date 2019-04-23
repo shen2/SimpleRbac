@@ -1,5 +1,5 @@
 {
-    "name": "shen2/simple-acl",
+    "name": "shen2/simple-rbac",
     "license": "MIT",
     "authors": [
         {
@@ -7,5 +7,7 @@
             "email": "zhenyupku@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^7.0",
+    }
 }

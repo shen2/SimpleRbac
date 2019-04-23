@@ -1,16 +1,17 @@
 <?php
-namespace SimpleAcl;
+declare(strict_types=1);
+
+namespace SimpleRbac;
 
 interface ResourceInterface{
 	/**
-	 * 充当ACL的关联数组
-	 * interface 内不能包含变量，只能注释掉
-	 */
-	// public static $acl = array();
-	
-	/**
 	 * 根据访问者获得角色
-	 * @param UserTrait $user
+	 * @param mixed $subject
+     * @return array
 	 */
-	public function getRoles($user);
+	public function getRoles($subject);
+
+	public function allow(string $role, string $permission);
+
+	public function getRolePermissions(string $role) : array;
 }
