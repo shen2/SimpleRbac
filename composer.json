@@ -1,0 +1,11 @@
+{
+    "name": "shen2/simple-acl",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shen Zhenyu",
+            "email": "zhenyupku@gmail.com"
+        }
+    ],
+    "require": {}
+}
