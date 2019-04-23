@@ -8,13 +8,13 @@ trait ResourceTrait{
      * 充当ACL的关联数组
      * 
      */
-    //protected static $_acl;
+    //protected static $_permissionAssignments;
 
     public function allow(string $role, string $permission){
-        return self::$_acl[$role][$permission] ?? null;
+        return self::$_permissionAssignments[$role][$permission] ?? null;
     }
 
     public function getRolePermissions(string $role) : array{
-        return self::$_acl[$role];
+        return self::$_permissionAssignments[$role];
     }
 }
