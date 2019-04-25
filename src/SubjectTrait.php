@@ -13,10 +13,10 @@ trait SubjectTrait{
 		$roles = $resource->getRoles($this);
 		
 		foreach ($roles as $role){
-			$permission = $resource->allow($role, $permission);
+			$bool = $resource->allow($role, $permission);
 
-			if ($permission !== null)
-				return $permission;
+			if ($bool !== null)
+				return $bool;
 		}
 
 		return false;
